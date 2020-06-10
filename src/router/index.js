@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-06-01 11:35:52
- * @LastEditTime: 2020-06-09 10:05:54
+ * @LastEditTime: 2020-06-10 11:43:26
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \wash-car\src\router\index.js
@@ -52,8 +52,9 @@ router.beforeEach((to, from, next) => {
   // 调用初始化接口
   var xhr = new XMLHttpRequest()
   xhr.open('POST', '/adboss/wechartH5/initIndex', false)
+  xhr.setRequestHeader('content-type', 'application/json')
   xhr.setRequestHeader('token', token)
-  xhr.send()
+  xhr.send(JSON.stringify({ token: '1212' }))
   let res
   if (xhr.status === 200) {
     res = JSON.parse(xhr.responseText)
@@ -67,8 +68,8 @@ router.beforeEach((to, from, next) => {
     Vue.prototype.$dialog.alert({
       message: '登录过期,请重新授权！'
     }).then(() => {
-      Vue.prototype.$tools.auth.setToken()
       window.location.href = res.retMsg
+      Vue.prototype.$tools.auth.setToken()
     })
   } else {
     Vue.prototype.$dialog.alert({

@@ -1,16 +1,13 @@
 <!--
  * @Author: your name
  * @Date: 2020-06-03 15:19:49
- * @LastEditTime: 2020-06-08 17:47:39
+ * @LastEditTime: 2020-06-10 15:17:27
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \wash-car\src\components\tabItem.vue
 -->
 <template>
   <div class="pickUp">
-    <!-- <van-cell v-for="item in list" :key="item">
-      {{item}}
-    </van-cell> -->
     <van-cell v-for="(item, index) in orderList" :key="index">
       <van-row gutter="20">
         <van-col span="4">
@@ -19,9 +16,9 @@
               round
               width="30px"
               height="30px"
-              src="http://logo.16888.com/logoimage/200756165032737.jpg"
+              :src="item.carImgUrl"
             />
-            <div class="carName">上汽通用威朗</div>
+            <div class="carName">{{item.carSeriesFullName}}</div>
           </div>
         </van-col>
         <van-col span="20">
@@ -43,7 +40,7 @@
                 嘱咐： {{item.chargeMsg}}
               </div>
               <div class="tel">
-                {{item.phoneNum}}
+                <a :href='`tel:${item.phoneNum}`'>{{item.phoneNum}}</a>
               </div>
             </div>
             <div class="time">
@@ -74,6 +71,9 @@ export default {
   },
   data () {
     return {
+      loading: false,
+      finished: false,
+      refreshing: false
     }
   },
 
@@ -95,9 +95,6 @@ export default {
                 this.$toast.success('提车成功！')
                 done()
                 this.$emit('refresh', this.type)
-              } else {
-                this.$toast.fail(data.retMsg || '提车失败！')
-                done()
               }
             }).catch((error) => {
               console.log(error)
@@ -138,8 +135,11 @@ export default {
         color: #909399;
       }
       .tel {
-        color: #409EFF;
-        font-weight: bold;
+        a {
+          color: #409EFF;
+          font-weight: bold;
+          text-decoration: none;
+        }
       }
     }
     .time {

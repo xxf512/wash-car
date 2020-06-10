@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-06-01 11:35:52
- * @LastEditTime: 2020-06-09 10:12:31
+ * @LastEditTime: 2020-06-10 13:46:49
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \wash-car\src\main.js
@@ -43,12 +43,16 @@ axios.interceptors.response.use(response => {
     window.global.$dialog.alert({
       message: '登录过期,请重新授权！'
     }).then(() => {
-      window.global.$tools.auth.setToken()
       window.location.href = response.data.retMsg
+      window.global.$tools.auth.setToken()
     })
-    return
+  } else if (response.data.retCode === '0000') {
+    return response
+  } else {
+    window.global.$dialog.alert({
+      message: response.data.retMsg
+    })
   }
-  return response
 }, error => {
   // 请求失败
   if (error && error.response) {

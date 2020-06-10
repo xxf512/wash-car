@@ -156,7 +156,7 @@ export default {
       })
     },
     initInfo () {
-      this.$axios.post('/adboss/wechartH5/initCreateOrder').then(({ data }) => {
+      this.$axios.post('/adboss/wechartH5/initCreateOrder', {}).then(({ data }) => {
         this.initInfoObj = JSON.parse(JSON.stringify(data))
         const { technicianList, businessManagerName, estimatedDeliveryDate } = this.initInfoObj
         this.columns = technicianList.slice()
@@ -223,10 +223,12 @@ export default {
           })
           // 根据车牌号查询用户信息
           this.$axios.post('/adboss/wechartH5/clientInfoQuery', { licenseNumber: licenseNumber }).then(({ data }) => {
-            const { clientName, phoneNum, gender } = data
-            this.clientName = clientName
-            this.phoneNum = phoneNum
-            this.gender = gender
+            if (data.retCode === '0000') {
+              const { clientName, phoneNum, gender } = data
+              this.clientName = clientName
+              this.phoneNum = phoneNum
+              this.gender = gender
+            }
           })
         } else {
           this.showOverlay = false

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-06-05 17:00:22
- * @LastEditTime: 2020-06-09 10:03:00
+ * @LastEditTime: 2020-06-09 11:02:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \wash-car\src\utils\auth.js
@@ -9,7 +9,7 @@
 // import Vue from 'vue'
 const auth = {
   getToken () {
-    if (window.localStorage.getItem('token')) {
+    if (auth.getUrlParams('retCode') === '0000' && (window.localStorage.getItem('token') === auth.getUrlParams('token'))) {
       return window.localStorage.getItem('token')
     }
     if (auth.getUrlParams('retCode') === '0000') {
