@@ -13,7 +13,7 @@
           label="车牌号"
         >
         <template #input>
-          <digit-input v-model="licenseNumber"/>
+          <digit-input v-model="licenseNumber" @saveInput='saveInput'/>
           <van-uploader :after-read="afterRead" :before-read="beforeRead">
             <van-icon class="icon-scan" name="photograph"/>
           </van-uploader>
@@ -137,6 +137,17 @@ export default {
     this.initInfo()
   },
   methods: {
+    saveInput (val) {
+      // 根据车牌号查询用户信息
+      this.$axios.post('/adboss/wechartH5/clientInfoQuery', { licenseNumber: val }).then(({ data }) => {
+        if (data.retCode === '0000') {
+          const { clientName, phoneNum, gender } = data
+          this.clientName = clientName
+          this.phoneNum = phoneNum
+          this.gender = gender
+        }
+      })
+    },
     beforeRead (file) {
       console.log('原始文件', file)
       return new Promise((resolve, reject) => {
@@ -232,7 +243,7 @@ export default {
           })
         } else {
           this.showOverlay = false
-          this.$toast.fail(data.retMsg || '识别失败，请手动输入！')
+          // this.$toast.fail(data.retMsg || '识别失败，请手动输入！')
         }
       }).catch((error) => {
         console.log(error)

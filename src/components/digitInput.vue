@@ -83,6 +83,15 @@ export default {
         this.$refs['ref' + (index + 1)][0].focus()
       }
       this.$emit('input', this.digits)
+      if (this.currentInput === 6) {
+        const val = (this.digits || []).reduce((p, i) => {
+          p += i.value
+          return p
+        }, '')
+        if (val.length === 7) {
+          this.$emit('saveInput', val)
+        }
+      }
     },
     onDelete (index) {
       // 如果是第1格，不触发光标移动至上一个输入框
